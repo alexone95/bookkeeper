@@ -1170,6 +1170,8 @@
       <id>delombok</id>
       <properties>
         <src.dir>${project.build.directory}/generated-sources/delombok</src.dir>
+        <sonar.organization>alexone95</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
       </properties>
       <build>
         <plugins>

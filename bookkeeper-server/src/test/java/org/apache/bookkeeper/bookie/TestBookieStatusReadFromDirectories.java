@@ -17,17 +17,17 @@ import static org.apache.bookkeeper.util.BookKeeperConstants.BOOKIE_STATUS_FILEN
 @RunWith(Parameterized.class)
 public class TestBookieStatusReadFromDirectories {
 
-    private BookieStatus bookieStatus = new BookieStatus();
+    private final BookieStatus bookieStatus = new BookieStatus();
 
-    private List<File> directories;
+    private final List<File> directories;
 
-    private volatile BookieStatus.BookieMode bookieMode;
+    private final BookieStatus.BookieMode bookieMode;
 
-    private Object testResult;
+    private final Object testResult;
 
-    private int index;
+    private final int index;
 
-    private int size;
+    private final int size;
 
 
     @Parameterized.Parameters

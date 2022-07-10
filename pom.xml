@@ -105,6 +105,8 @@
     </developer>
   </developers>
   <properties>
+    <sonar.organization>alexone95</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <javac.target>1.8</javac.target>
@@ -1258,6 +1260,8 @@
       </activation>
       <properties>
         <nar.aolProperties>src/apple_m1_aol.properties</nar.aolProperties>
+        <sonar.organization>alexone95</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
       </properties>
     </profile>
     <profile>
@@ -1266,6 +1270,8 @@
         <jdk>[11,)</jdk>
       </activation>
       <properties>
+        <sonar.organization>alexone95</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <test.additional.args>
           --add-opens java.base/java.io=ALL-UNNAMED
           --add-opens java.base/java.lang=ALL-UNNAMED

@@ -27,6 +27,10 @@
     <packaging>pom</packaging>
     <name>Jacoco Report</name>
 
+    <properties>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../jacoco-tests-report-aggregator/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    </properties>
+
 
     <build>
         <plugins>

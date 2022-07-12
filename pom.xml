@@ -71,6 +71,7 @@
     <module>tests</module>
     <module>native-io</module>
     <module>testtools</module>
+    <module>jacocoreport</module>
   </modules>
   <mailingLists>
     <mailingList>

@@ -36,7 +36,7 @@ public class TestBufferedChannelWrite {
                 {generateByteBuf(0, false), 1, 0L},
                 {generateByteBuf(1, false), 1, 1L + HEADER_SIZE},
                 // Coverage
-                {generateByteBuf(1, false), -33, (long)0}
+                //{generateByteBuf(1, false), -33, (long)0}
         });
 
     }

@@ -214,9 +214,46 @@
       <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-maven</artifactId>
+      <version>1.5.1</version>
+      <type>maven-plugin</type>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.8</version>
+        <executions>
+          <!-- to avoid bugs in some situations -->
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+
+          <!-- create report during maven verify phase -->
+          <execution>
+            <id>report</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <argLine>-Xmx1024m</argLine>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -296,6 +333,24 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.5.1</version>
+        <configuration>
+          <targetClasses>
+            <param>org.apache.bookkeeper.bookie.BookieStatus</param>
+            <param>org.apache.bookkeeper.bookie.BufferedChannel</param>
+          </targetClasses>
+          <targetTests>
+            <param>org.apache.bookkeeper.bookie.TestBufferedChannelWrite</param>
+            <param>org.apache.bookkeeper.bookie.TestBufferedChannelRead</param>
+            <param>org.apache.bookkeeper.bookie.TestBookieStatusParse</param>
+            <param>org.apache.bookkeeper.bookie.TestBookieStatusReadFromDirectories</param>
+            <param>org.apache.bookkeeper.bookie.TestBookieStatusWriteToDirectories</param>
+          </targetTests>
+        </configuration>
       </plugin>
     </plugins>
   </build>

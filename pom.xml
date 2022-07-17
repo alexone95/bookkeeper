@@ -106,6 +106,8 @@
     </developer>
   </developers>
   <properties>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/.../jacocoreport/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <skip.unit.tests>false</skip.unit.tests>
     <sonar.organization>alexone95</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -867,7 +869,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.6</version>
+          <version>0.8.8</version>
         </plugin>
 
         <plugin>
@@ -1094,29 +1096,9 @@
   <profiles>
     <profile>
       <!-- profile used by jenkins CI -->
-      <id>code-coverage</id>
+      <id>coverage</id>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.eluder.coveralls</groupId>
-            <artifactId>coveralls-maven-plugin</artifactId>
-            <version>${coveralls-maven-plugin.version}</version>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>${maven-surefire-plugin.version}</version>
-            <configuration>
-              <!-- @{argLine} is a variable injected by JaCoCo-->
-              <argLine>@{argLine} -Xmx2G -Djava.net.preferIPv4Stack=true</argLine>
-              <redirectTestOutputToFile>${redirectTestOutputToFile}</redirectTestOutputToFile>
-              <forkCount>${forkCount.variable}</forkCount>
-              <reuseForks>false</reuseForks>
-              <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds>
-              <!-- we want build to complete even in case of failures -->
-              <testFailureIgnore>true</testFailureIgnore>
-            </configuration>
-          </plugin>
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
@@ -1127,15 +1109,27 @@
                 <goals>
                   <goal>prepare-agent</goal>
                 </goals>
-              </execution>
-              <execution>
-                <id>report</id>
-                <goals>
-                  <goal>report</goal>
-                </goals>
+                <configuration>
+                  <propertyName>jacoco.agent.argLine</propertyName>
+                  <destFile>target/jacoco.exec</destFile>
+                </configuration>
               </execution>
             </executions>
           </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+            <configuration>
+              <!-- @{argLine} is a variable injected by JaCoCo-->
+              <printSummary>false</printSummary>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <forkCount>3</forkCount>
+              <reuseForks>true</reuseForks>
+              <argLine>-Xmx1024m -noverify</argLine>
+            </configuration>
+          </plugin>
+
         </plugins>
       </build>
     </profile>
@@ -1196,12 +1190,6 @@
       <id>delombok</id>
       <properties>
         <src.dir>${project.build.directory}/generated-sources/delombok</src.dir>
-        <sonar.organization>alexone95</sonar.organization>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../jacocoreport/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
       </properties>
       <build>

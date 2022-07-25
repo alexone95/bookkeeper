@@ -17,7 +17,7 @@ import java.util.*;
 import static org.apache.bookkeeper.util.BookKeeperConstants.BOOKIE_STATUS_FILENAME;
 
 @RunWith(Parameterized.class)
-public class TestBookieStatusParse {
+public class BookieStatusTest {
 
     private BookieStatus bookieStatus = new BookieStatus();
 
@@ -43,7 +43,7 @@ public class TestBookieStatusParse {
         });
     }
 
-    public TestBookieStatusParse(int index, BufferedReader bufferedReader, Object testResult) {
+    public BookieStatusTest(int index, BufferedReader bufferedReader, Object testResult) {
         this.testResult = testResult;
         this.index = index;
         this.bufferedReader = bufferedReader;

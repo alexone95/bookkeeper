@@ -3,7 +3,10 @@ package org.apache.bookkeeper.bookie;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -58,7 +61,7 @@ public class TestBookieStatusReadFromDirectories {
         List<File> directories = new ArrayList<File>();
         File directory;
 
-        File tempDirForIndex = new File("tempdir" + index);
+        File tempDirForIndex = new File("tempdirRead" + index);
         if (!tempDirForIndex.exists()){
             tempDirForIndex.mkdirs();
         }
@@ -80,17 +83,17 @@ public class TestBookieStatusReadFromDirectories {
         tempTxtFile = new File(directoryPath + "/" + BOOKIE_STATUS_FILENAME);
         tempTxtFile.deleteOnExit();
 
+        Files.write(tempTxtFile.toPath(), Collections.singleton(String.format("%s,%s,%s", content[0], content[1], content[2])));
         if (tempTxtFile.createNewFile()) {
-            Files.write(tempTxtFile.toPath(), Collections.singleton(String.format("%s,%s,%s", content[0], content[1], content[2])));
-            System.out.println("File creato");
+            System.out.println("File creato READ");
         }
         else
-            System.out.println("File già esistente");
+            System.out.println("File già esistente READ");
     }
 
     @After
     public void deleteTempDir() throws IOException {
-        FileUtils.deleteDirectory(new File("tempdir" + index));
+        FileUtils.deleteDirectory(new File("tempdirRead" + index));
     }
 
     @Test
@@ -99,7 +102,7 @@ public class TestBookieStatusReadFromDirectories {
         try {
             bookieStatus.readFromDirectories(directories);
             for (int i=0; i < size; i++){
-                File bookieStatusFile = new File(String.format("tempdir%s/dir%s/BOOKIE_STATUS", index, i));
+                File bookieStatusFile = new File(String.format("tempdirRead%s/dir%s/BOOKIE_STATUS", index, i));
                 List<String> read = Files.readAllLines(bookieStatusFile.toPath());
                 bookieModeFromRead = read.get(0).split(",");
             }

@@ -35,8 +35,11 @@ public class TestBookieStatusWriteToDirectories {
 
                 // Suite test
                 {0, 0, null, BookieStatus.BookieMode.READ_ONLY, new NullPointerException() },
-                {1, 1, generateListOfDirectories(1, 1), BookieStatus.BookieMode.READ_ONLY, "READ_ONLY" },
-                {2, 1, generateListOfDirectories(1, 2), BookieStatus.BookieMode.READ_WRITE, "READ_WRITE" },
+                {1, 1, generateListOfDirectories(1, 1, true), BookieStatus.BookieMode.READ_ONLY, "READ_ONLY" },
+                {2, 1, generateListOfDirectories(1, 2, true), BookieStatus.BookieMode.READ_WRITE, "READ_WRITE" },
+                // Coverage
+                {3, 1, generateListOfDirectories(1, 3, false), BookieStatus.BookieMode.READ_WRITE,
+                        new IndexOutOfBoundsException("Index: 0, Size: 0")},
 
         });
     }
@@ -65,7 +68,7 @@ public class TestBookieStatusWriteToDirectories {
         FileUtils.deleteDirectory(new File("tempdir" + index));
     }
 
-    public static List<File> generateListOfDirectories(int size, int index) throws IOException {
+    public static List<File> generateListOfDirectories(int size, int index, boolean writable) throws IOException {
         List<File> directories = new ArrayList<File>();
         File directory;
 
@@ -80,19 +83,21 @@ public class TestBookieStatusWriteToDirectories {
             if (!directory.exists()){
                 directory.mkdirs();
             }
-            generateBookieStatusFile(directory.getPath());
+            generateBookieStatusFile(directory.getPath(), writable);
             directories.add(directory);
         }
         return directories;
     }
 
-    public static void generateBookieStatusFile(String directoryPath) throws IOException {
+    public static void generateBookieStatusFile(String directoryPath, boolean writable) throws IOException {
         File tempTxtFile;
-        tempTxtFile = new File(directoryPath + BOOKIE_STATUS_FILENAME);
+        tempTxtFile = new File(directoryPath + "/" + BOOKIE_STATUS_FILENAME);
         tempTxtFile.deleteOnExit();
 
-        if (tempTxtFile.createNewFile())
+        if (tempTxtFile.createNewFile()){
             System.out.println("File creato");
+            tempTxtFile.setWritable(writable);
+        }
         else
             System.out.println("File già esistente");
     }

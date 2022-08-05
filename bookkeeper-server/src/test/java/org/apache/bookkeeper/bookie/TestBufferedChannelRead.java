@@ -43,7 +43,10 @@ public class TestBufferedChannelRead {
 
                 // Coverage
                 {1, generateByteBuf(1024, true), 35, 45, true, 10, new IllegalArgumentException("minWritableBytes : -25 (expected: >= 0)")}, //prova a scrivere un numero negativo di byte
-                {1, generateByteBuf(1024, false), 35, 45, false, 10, new IOException("Read past EOF")}
+                {1, generateByteBuf(1024, false), 35, 45, false, 10, new IOException("Read past EOF")},
+
+                // Mutation
+                {1, generateByteBuf(0, false), 35, 45, false, 10, new IOException("Read past EOF")}
         });
     }
 

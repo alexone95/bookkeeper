@@ -65,6 +65,7 @@ public class TestBookieStatusReadFromDirectories {
         if (!tempDirForIndex.exists()){
             tempDirForIndex.mkdirs();
         }
+        tempDirForIndex.deleteOnExit();
 
         for (int i=0; i < size; i++){
             String dirName = String.format("dir%s", i);

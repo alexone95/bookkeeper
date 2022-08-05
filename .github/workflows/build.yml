@@ -30,7 +30,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Mutation Report
-        run: mvn package org.pitest:pitest-maven:mutationCoverage surefire:test -Dtest=TestBufferedChannelWrite -DfailIfNoTests=false
+        run: mvn package org.pitest:pitest-maven:mutationCoverage surefire:test -DfailIfNoTests=false
       - name: Jacoco Report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any

@@ -39,7 +39,7 @@ public class TestBookieStatusWriteToDirectories {
                 {2, 1, generateListOfDirectories(1, 2, true), BookieStatus.BookieMode.READ_WRITE, "READ_WRITE" },
                 // Coverage
                 {3, 1, generateListOfDirectories(1, 3, false), BookieStatus.BookieMode.READ_WRITE,
-                        new IndexOutOfBoundsException("Index: 0, Size: 0")},
+                        new IndexOutOfBoundsException()},
 
         });
     }
@@ -115,7 +115,7 @@ public class TestBookieStatusWriteToDirectories {
             }
             Assert.assertEquals(testResult, bookieModeFromRead);
         } catch (Exception e){
-            Assert.assertEquals(testResult.toString(), e.toString());
+            Assert.assertEquals(testResult.getClass(), e.getClass());
         }
     }
 }

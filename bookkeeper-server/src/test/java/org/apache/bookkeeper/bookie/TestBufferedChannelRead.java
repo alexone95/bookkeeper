@@ -37,7 +37,7 @@ public class TestBufferedChannelRead {
         return Arrays.asList(new Object[][] {
 
                 // Suite minimale
-                {1, null, -1, 0, true,0,0},
+                {1, null, -1, 0, true, 0, 0},
                 {1, generateByteBuf(1024, false), 0, 1, false, 0, 1},
                 {1, generateByteBuf(1024, false), 2, 2, false, 0, 2},
 

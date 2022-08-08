@@ -45,6 +45,9 @@ public class TestBookieStatusReadFromDirectories {
                 {2, 1, generateListOfDirectoriesAndWriteBookieStatus(1, 2,
                         new String[] {"1", "READ_WRITE", "654321"}),
                         BookieStatus.BookieMode.READ_WRITE, new String[] {"1", "READ_WRITE", "654321"}},
+                // Mutation
+                {3, 1, generateListOfDirectoriesAndWriteBookieStatus(1, 3,
+                        null), null, null} //  Mutazione sopravvissuta riga 144
         });
     }
 
@@ -73,7 +76,9 @@ public class TestBookieStatusReadFromDirectories {
             if (!directory.exists()){
                 directory.mkdirs();
             }
-            generateBookieStatusFile(directory.getPath(), content);
+
+            if (content != null)
+                generateBookieStatusFile(directory.getPath(), content);
             directories.add(directory);
         }
         return directories;
@@ -100,21 +105,33 @@ public class TestBookieStatusReadFromDirectories {
     @Test
     public void testReadFromDirectories() {
         String[] bookieModeFromRead = null;
+        String[] testResultToArray = null;
         try {
             bookieStatus.readFromDirectories(directories);
-            for (int i=0; i < size; i++){
+        }
+        catch (Exception e){
+            Assert.assertEquals(testResult.toString(), e.toString());
+        }
+        for (int i=0; i < size; i++){
+            try{
                 File bookieStatusFile = new File(String.format("tempdirRead%s/dir%s/BOOKIE_STATUS", index, i));
                 List<String> read = Files.readAllLines(bookieStatusFile.toPath());
                 bookieModeFromRead = read.get(0).split(",");
             }
-            String[] testResultToArray = (String[]) testResult;
-            assert bookieModeFromRead != null;
+            catch (NullPointerException | IOException e){
+                bookieModeFromRead = null;
+            }
+        }
+        if (testResult != null && bookieModeFromRead != null) {
+            testResultToArray = (String[]) testResult;
             Assert.assertEquals(testResultToArray[0], bookieModeFromRead[0]);
             Assert.assertEquals(testResultToArray[1], bookieModeFromRead[1]);
             Assert.assertEquals(testResultToArray[2], bookieModeFromRead[2]);
-        } catch (Exception e){
-            Assert.assertEquals(testResult.toString(), e.toString());
         }
+        else{
+            Assert.assertNull(testResultToArray);
+        }
+
     }
 
 }

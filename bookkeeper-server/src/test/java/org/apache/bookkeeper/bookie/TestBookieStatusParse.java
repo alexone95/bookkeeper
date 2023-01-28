@@ -39,7 +39,9 @@ public class TestBookieStatusParse {
                         new NullPointerException()},
                 {2, generateBufferedReader(8192, 2, new String[] {"1", "READ_ONLY", "12345"}),
                         new String[] {"1", "READ_ONLY", "12345"}},
-
+                // Coverage
+                {3, generateBufferedReader(1, 3, null), new NullPointerException() },
+                {4, generateBufferedReader(1, 4, new String[] {",", ","}), new NullPointerException() },
         });
     }
 
@@ -60,7 +62,14 @@ public class TestBookieStatusParse {
         tempTxtFile.deleteOnExit();
 
         if (tempTxtFile.createNewFile()) {
-            Files.write(tempTxtFile.toPath(), Collections.singleton(String.format("%s,%s,%s", content[0], content[1], content[2])));
+            if (content != null && content.length == 3)
+                Files.write(tempTxtFile.toPath(), Collections.singleton(String.format("%s,%s,%s", content[0], content[1], content[2])));
+            else if (content == null) {
+                Files.write(tempTxtFile.toPath(), Collections.singleton(""));
+            }
+            else {
+                Files.write(tempTxtFile.toPath(), Collections.singleton(String.format("%s%s", content[0], content[1])));
+            }
             System.out.println("File creato");
         }
         else

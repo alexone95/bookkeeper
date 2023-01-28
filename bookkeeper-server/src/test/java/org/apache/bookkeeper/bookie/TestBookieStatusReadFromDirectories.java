@@ -45,8 +45,12 @@ public class TestBookieStatusReadFromDirectories {
                 {2, 1, generateListOfDirectoriesAndWriteBookieStatus(1, 2,
                         new String[] {"1", "READ_WRITE", "654321"}),
                         BookieStatus.BookieMode.READ_WRITE, new String[] {"1", "READ_WRITE", "654321"}},
-                // Mutation
+                // Coverage
                 {3, 1, generateListOfDirectoriesAndWriteBookieStatus(1, 3,
+                        null), BookieStatus.BookieMode.READ_ONLY, null },
+
+                // Mutation
+                {4, 1, generateListOfDirectoriesAndWriteBookieStatus(1, 4,
                         null), null, null} //  Mutazione sopravvissuta riga 144
         });
     }

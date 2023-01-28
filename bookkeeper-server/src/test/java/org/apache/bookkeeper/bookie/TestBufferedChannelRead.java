@@ -36,17 +36,20 @@ public class TestBufferedChannelRead {
     public static Collection BufferedChannelParameters() {
         return Arrays.asList(new Object[][] {
 
-                // Suite minimale
-                {1, null, -1, 0, true, 0, 0},
-                {1, generateByteBuf(1024, false), 0, 1, false, 0, 1},
+                // Suite Test
+                {0, null, -1, 0, true, 0, 0},
+                {1, generateByteBuf(1024, false), 1, 1, false, 0, 1},
                 {1, generateByteBuf(1024, false), 2, 2, false, 0, 2},
 
                 // Coverage
-                {1, generateByteBuf(1024, true), 35, 45, true, 10, new IllegalArgumentException("minWritableBytes : -25 (expected: >= 0)")}, //prova a scrivere un numero negativo di byte
-                {1, generateByteBuf(1024, false), 35, 45, false, 10, new IOException("Read past EOF")},
+                {1, generateByteBuf(1024, true), 35, 45, true, 10,
+                        new IllegalArgumentException("minWritableBytes : -25 (expected: >= 0)")},
+                //prova a scrivere un numero negativo di byte
+                {1, generateByteBuf(1024, false), 35, 45, false, 10,
+                        new IOException("Read past EOF")},
 
                 // Mutation
-                //{1, generateByteBuf(0, false), 35, 45, false, 10, new IOException("Read past EOF")}
+                {1, generateByteBuf(0, false), 35, 45, false, 10, new IOException("Read past EOF")}
         });
     }
 
@@ -73,10 +76,8 @@ public class TestBufferedChannelRead {
         if (resetIndex) {
             ByteBuffer byteBuffer = ByteBuffer.allocate(writeBufferStartPosition);
             bufferedChannelFileChannel.write(byteBuffer);
-            source = generateByteBuf(8, resetIndex);
         }
-        else
-            source = generateByteBuf(8, resetIndex);
+        source = generateByteBuf(8, resetIndex);
 
         int bufferedChannelUnpersistedBytesBound = 10;
         bufferedChannel = new BufferedChannel(allocator, bufferedChannelFileChannel,

@@ -22,28 +22,34 @@ import io.netty.buffer.Unpooled;
 public class TestBufferedChannelWrite {
 
     private final ByteBuf source;
+
     private final long byteCapacity;
+
     private final Object testResult;
 
     private BufferedChannel bufferedChannel;
+
     private final static long HEADER_SIZE = 32L;
+
+    private final long unpersistedBytesBound;
 
     @Parameterized.Parameters
     public static Collection BufferedChannelParameters() {
         return Arrays.asList(new Object[][] {
                 // Suite di test
-                {null, 0, new NullPointerException()},
-                {generateByteBuf(0, false), 1, 0L},
-                {generateByteBuf(1, false), 1, 1L + HEADER_SIZE},
-                // Coverage
-                //{generateByteBuf(1, false), -33, (long)0}
+                {null, 0, -1, new NullPointerException()},
+                {generateByteBuf(0, false), 1, -1, 0L},
+                {generateByteBuf(1, false), 1, 1, 1L + HEADER_SIZE},
+                // Mutation
+                {generateByteBuf(1, true), 1, 1, 0L}, // Reset Index a True
         });
 
     }
 
-    public TestBufferedChannelWrite(ByteBuf byteBuf, int byteCapacity, Object testResult){
+    public TestBufferedChannelWrite(ByteBuf byteBuf, int byteCapacity, long unpersistedBytesBound, Object testResult){
         this.source = byteBuf;
         this.byteCapacity = byteCapacity + HEADER_SIZE;
+        this.unpersistedBytesBound = unpersistedBytesBound;
         this.testResult = testResult;
     }
 
@@ -85,7 +91,8 @@ public class TestBufferedChannelWrite {
         File tempLogFile = File.createTempFile("test", "log");
         tempLogFile.deleteOnExit();
         FileChannel fileChannel = new RandomAccessFile(tempLogFile, "rw").getChannel();
-        bufferedChannel = new BufferedChannel(UnpooledByteBufAllocator.DEFAULT, fileChannel, (int) byteCapacity);
+        bufferedChannel = new BufferedChannel(UnpooledByteBufAllocator.DEFAULT, fileChannel,
+                (int) byteCapacity, unpersistedBytesBound);
     }
 
     @After
